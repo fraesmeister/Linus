@@ -1,11 +1,4 @@
-import java.security.Key;
-import java.util.HashMap;
-import java.util.Scanner;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.*;
 import static java.util.Map.Entry.*;
@@ -15,41 +8,37 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        HashMap<String, Integer> fruitPrices = new HashMap<String, Integer>();
+        ArrayList<Fruits> fruits = new ArrayList<Fruits>();
 
 
         int i = 1;
-        boolean cont = true;
-        while (cont == true) {
+        while (true) {
             Fruits fruit = new Fruits();
             System.out.println("Enter fruit no. " + i + " name: ");
-            fruit.frtName = scanner.nextLine();
-            if (fruit.frtName.equals("")) {
+            String name = scanner.nextLine();
+            if (name.equals("")) {
                 break;
             }
+            fruit.setName(name);
             System.out.println("Enter fruit no. " + i + " price: ");
-            fruit.frtPrice = scanner.nextInt();
-            fruitPrices.put(fruit.frtName, fruit.frtPrice);
+            Integer price = scanner.nextInt();
+            fruit.setPrice(price);
+            fruits.add(fruit);
             scanner.nextLine();
             i++;
         }
 
-        Fruits max = new Fruits(); // here we will store the fruit with the highest price
-        Fruits min = new Fruits();
-        fruitPrices.forEach((name, price) -> {
-            if (max.frtPrice == null || price > max.frtPrice) {
-                max.frtName = name;
-                max.frtPrice = price;
-            }
-            if (min.frtPrice == null || price < min.frtPrice) {
-                min.frtName = name;
-                min.frtPrice = price;
-            }
-        });
+//        fruits.sort(new Comparator<Fruits>() {
+//            @Override
+//            public int compare(Fruits f1, Fruits f2) {
+//                return f1.getPrice() - f2.getPrice();
+//            }
+//        });
+        fruits.sort(Comparator.comparingInt(Fruits::getPrice)); // same as commented lines above (tips from IntelliJm)
 
-        System.out.println(fruitPrices);
-        System.out.println("The cheapest item is " + min.frtName +  " which costs " + min.frtPrice);
-        System.out.println("The most expensive item is " + max.frtName +  " which costs " + max.frtPrice);
-
+        Fruits cheap = fruits.get(0);
+        Fruits expensive = fruits.get(fruits.size() - 1);
+        System.out.println("Cheapest fruit:\t" + cheap.getName() + " (" + cheap.getPrice() + ")");
+        System.out.println("Most expensive fruit:\t" + expensive.getName() + " (" + expensive.getPrice() + ")");
     }
 }
